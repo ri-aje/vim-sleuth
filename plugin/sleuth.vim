@@ -9,7 +9,7 @@ endif
 let g:loaded_sleuth = 1
 
 function! s:guess(lines) abort
-  let options = {}
+  let options = {'shiftwidth': 1}
   let heuristics = {'spaces': 0, 'hard': 0, 'soft': 0}
   let ccomment = 0
   let podcomment = 0
