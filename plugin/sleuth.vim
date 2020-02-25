@@ -9,7 +9,7 @@ endif
 let g:loaded_sleuth = 1
 
 function! s:guess(lines) abort
-  let options = {'shiftwidth': 1}
+  let options = {}
   let heuristics = {'spaces': 0, 'hard': 0, 'soft': 0}
   let ccomment = 0
   let podcomment = 0
@@ -94,6 +94,12 @@ function! s:guess(lines) abort
     if heuristics.hard
       let options.tabstop = 8
     endif
+  endif
+
+  " if shiftwidth is not deduced to be any sensible value and it's set either,
+  " then let it default to 1 which is my preference.
+  if !has_key(options, 'shiftwidth')
+    let options.shiftwidth = 1
   endif
 
   return options
