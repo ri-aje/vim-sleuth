@@ -37,7 +37,7 @@ endif
 
 function! s:Guess(source, detected, lines) abort
   let has_heredocs = a:detected.filetype =~# '^\%(perl\|php\|ruby\|[cz]\=sh\|bash\)$'
-  let options = {}
+  let options = {'shiftwidth': 1}
   let heuristics = {'spaces': 0, 'hard': 0, 'soft': 0, 'checked': 0, 'indents': {}}
   let tabstop = get(a:detected.options, 'tabstop', get(a:detected.defaults, 'tabstop', [8]))[0]
   let softtab = repeat(' ', tabstop)
@@ -92,7 +92,7 @@ function! s:Guess(source, detected, lines) abort
     let increment = prev_indent < 0 ? 0 : indent - prev_indent
     let prev_indent = indent
     let prev_line = line
-    if increment > 1 && (increment < 4 || increment % 4 == 0)
+    if increment >= 1 && (increment < 4 || increment % 4 == 0)
       if has_key(heuristics.indents, increment)
         let heuristics.indents[increment] += 1
       else
@@ -141,6 +141,11 @@ function! s:Guess(source, detected, lines) abort
       let options.tabstop = options.shiftwidth
       let options.shiftwidth = 0
     endif
+  endif
+
+  " shiftwidth is neither deduced nor set, default to 1.
+  if !has_key(options, 'shiftwidth')
+    let options.shiftwidth = 1
   endif
 
   call map(options, '[v:val, a:source]')
